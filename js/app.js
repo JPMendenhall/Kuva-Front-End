@@ -39,6 +39,7 @@ $(document).ready(function() {
   var startdate;
   var enddate;
   $("#albumnames").on('click', '.viewalbum', function() {
+    $('#picDiv').empty()
     event.preventDefault()
     var tripid = this.id
     var API = "https://kuvafundb.herokuapp.com/api/event/eventdata/" + tripid;
@@ -98,6 +99,35 @@ $(document).ready(function() {
         }
       })
   }
-})
 
-//POST request from create album page
+  //POST request from create album page
+
+  $(".submitNewEvent").on('click', function() {
+    var newEventData = {}
+    var tripName = "name"
+    var tripStartDate = "start_date"
+    var tripEndDate = "end_date"
+    // moment($('#newEventStartDate').val()).unix() + "000"
+    newEventData[tripName] = $('#newEventName').val();
+    newEventData[tripStartDate] = Date.parse($('#newEventStartDate').val());
+    newEventData[tripEndDate] = Date.parse($('#newEventEndDate').val());
+    console.log(newEventData)
+
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://kuvafundb.herokuapp.com/api/trips",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "cache-control": "no-cache",
+      },
+      "processData": false,
+      "data": JSON.stringify(newEventData)
+    }
+
+    $.ajax(settings).done(function(response) {
+      console.log(response);
+    });
+  })
+});
